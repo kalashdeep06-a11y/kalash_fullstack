@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OOP with React - Person Student Teacher</title>
+
+    <!-- React CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: #fff;
+            width: 260px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .role {
+            font-weight: bold;
+            color: #3498db;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Person – Student – Teacher (OOP in React)</h1>
+<div id="root"></div>
+
+<script type="text/babel">
+
+    // Base Class
+    class Person {
+        constructor(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        getDetails() {
+            return `Name: ${this.name}, Age: ${this.age}`;
+        }
+    }
+
+    // Student Class (Inheritance + Overriding)
+    class Student extends Person {
+        constructor(name, age, course) {
+            super(name, age);
+            this.course = course;
+        }
+
+        getDetails() {
+            return `Student: ${this.name}, Age: ${this.age}, Course: ${this.course}`;
+        }
+    }
+
+    // Teacher Class (Inheritance + Overriding)
+    class Teacher extends Person {
+        constructor(name, age, subject) {
+            super(name, age);
+            this.subject = subject;
+        }
+
+        getDetails() {
+            return `Teacher: ${this.name}, Age: ${this.age}, Subject: ${this.subject}`;
+        }
+    }
+
+    function App() {
+        // Polymorphism: same method, different behavior
+        const people = [
+            new Person("Amit", 30),
+            new Student("Riya", 20, "Computer Science"),
+            new Teacher("Dr. Sharma", 45, "Data Structures")
+        ];
+
+        return (
+            <div className="container">
+                {people.map((person, index) => (
+                    <div key={index} className="card">
+                        <p className="role">{person.constructor.name}</p>
+                        <p>{person.getDetails()}</p>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+
+</script>
+</body>
+</html>

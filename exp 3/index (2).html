@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library Management UI</title>
+
+    <!-- React CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f8;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+        }
+
+        button {
+            padding: 8px 12px;
+            background: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        .book {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .delete {
+            background: #e74c3c;
+        }
+
+        .delete:hover {
+            background: #c0392b;
+        }
+
+        .empty {
+            text-align: center;
+            color: gray;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    const { useState } = React;
+
+    function LibraryApp() {
+        const [books, setBooks] = useState([
+            { id: 1, title: "JavaScript Basics", author: "John Doe" },
+            { id: 2, title: "React Guide", author: "Dan Abramov" }
+        ]);
+
+        const [search, setSearch] = useState("");
+        const [title, setTitle] = useState("");
+        const [author, setAuthor] = useState("");
+
+        function addBook() {
+            if (title === "" || author === "") return;
+
+            setBooks([
+                ...books,
+                { id: Date.now(), title, author }
+            ]);
+
+            setTitle("");
+            setAuthor("");
+        }
+
+        function deleteBook(id) {
+            setBooks(books.filter(book => book.id !== id));
+        }
+
+        const filteredBooks = books.filter(book =>
+            book.title.toLowerCase().includes(search.toLowerCase())
+        );
+
+        return (
+            <div className="container">
+                <h1>Library Management System</h1>
+
+                {/* Search */}
+                <input
+                    type="text"
+                    placeholder="Search book..."
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                />
+
+                {/* Add Book */}
+                <input
+                    type="text"
+                    placeholder="Book Title"
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                />
+
+                <input
+                    type="text"
+                    placeholder="Author Name"
+                    value={author}
+                    onChange={e => setAuthor(e.target.value)}
+                />
+
+                <button onClick={addBook}>Add Book</button>
+
+                <hr />
+
+                {/* Book List */}
+                {filteredBooks.length === 0 ? (
+                    <p className="empty">No books found</p>
+                ) : (
+                    filteredBooks.map(book => (
+                        <div key={book.id} className="book">
+                            <span>
+                                <b>{book.title}</b> - {book.author}
+                            </span>
+                            <button
+                                className="delete"
+                                onClick={() => deleteBook(book.id)}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    ))
+                )}
+            </div>
+        );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<LibraryApp />);
+</script>
+</body>
+</html>                                                     
